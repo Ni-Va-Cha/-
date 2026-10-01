@@ -118,10 +118,10 @@
             { id: 'q8', text: '8. ฉันรู้สึกเหนื่อยล้า อ่อนเพลีย', type: 'negative' }
         ];
 
-        // สร้างคำถาม
         const container = document.getElementById('questionsContainer');
-        questions.forEach((q, index) => {
-            let html = `
+
+        questions.forEach((q) => {
+            const html = `
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                     <p class="mb-3 font-medium text-gray-700">${q.text}</p>
                     <div class="flex justify-between max-w-md mx-auto">
@@ -134,22 +134,21 @@
                     </div>
                 </div>
             `;
-            container.innerHTML += html;
+            container.insertAdjacentHTML('beforeend', html);
         });
 
-        // จัดการหน้า
         function nextStep() {
-            // ตรวจสอบความถูกต้องของ Step 1 เบื้องต้น
             const requiredFields = ['testPhase', 'gender', 'year', 'location'];
-            let isValid = true;
-            requiredFields.forEach(id => {
-                if(!document.getElementById(id).value) isValid = false;
+            const isValid = requiredFields.every(id => {
+                const element = document.getElementById(id);
+                return element && element.value && element.value.trim() !== '';
             });
-            
-            if(!isValid) {
+
+            if (!isValid) {
                 alert('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วน');
                 return;
             }
+
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
         }
@@ -159,91 +158,101 @@
             document.getElementById('step1').classList.remove('hidden');
         }
 
-        // จัดการ Form Submit
+        function getSelectedValue(questionId) {
+            const selected = document.querySelector(`input[name="${questionId}"]:checked`);
+            return selected ? Number(selected.value) : null;
+        }
+
         document.getElementById('assessmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // 1. ดึงข้อมูลส่วนตัว
+
+            const unansweredQuestions = questions.filter(q => getSelectedValue(q.id) === null);
+            if (unansweredQuestions.length > 0) {
+                alert('กรุณาเลือกคำตอบให้ครบทุกข้อก่อนส่งผลการประเมิน');
+                return;
+            }
+
             const formData = {
-                studentId: document.getElementById('studentId').value || 'ไม่ระบุ',
+                studentId: document.getElementById('studentId').value.trim() || 'ไม่ระบุ',
                 testPhase: document.getElementById('testPhase').value,
                 gender: document.getElementById('gender').value,
                 year: document.getElementById('year').value,
-                location: document.getElementById('location').value,
+                location: document.getElementById('location').value.trim(),
                 timestamp: new Date().toLocaleString('th-TH')
             };
 
-            // 2. คำนวณคะแนน
             let totalScore = 0;
             questions.forEach(q => {
-                let val = parseInt(document.querySelector(`input[name="${q.id}"]:checked`).value);
-                formData[q.id] = val; // เก็บคำตอบดิบไว้ส่งลง Sheet
-                
+                const value = getSelectedValue(q.id);
+                formData[q.id] = value;
+
+                let score = value;
                 if (q.type === 'negative') {
-                    val = 6 - val; // Reverse score: 5->1, 4->2, 3->3, 2->4, 1->5
+                    score = 6 - value;
                 }
-                totalScore += val;
+                totalScore += score;
             });
 
-            // 3. วิเคราะห์ระดับและคำแนะนำ
             let level, recommendation, icon, colorClass;
-            
+
             if (totalScore >= 33) {
-                level = "ดีเยี่ยม";
-                recommendation = "สภาวะอารมณ์ของคุณอยู่ในเกณฑ์ดีเยี่ยม มีพลังบวกและพร้อมเรียนรู้หรือทำกิจกรรมต่างๆ ขอให้รักษาความรู้สึกที่ดีนี้ไว้ต่อไปครับ";
-                icon = "🌟"; colorClass = "text-green-600";
+                level = 'ดีเยี่ยม';
+                recommendation = 'สภาวะอารมณ์ของคุณอยู่ในเกณฑ์ดีเยี่ยม มีพลังบวกและพร้อมเรียนรู้หรือทำกิจกรรมต่างๆ ขอให้รัก��าความรู้สึกที่ดีนี้ไว้ต่อไปครับ';
+                icon = '🌟';
+                colorClass = 'text-green-600';
             } else if (totalScore >= 26) {
-                level = "ดีมาก";
-                recommendation = "คุณสามารถจัดการอารมณ์ได้ดี มีความพร้อมในระดับที่ดี หากมีเรื่องท้าทายก็สามารถรับมือได้อย่างสบาย";
-                icon = "😊"; colorClass = "text-blue-500";
+                level = 'ดีมาก';
+                recommendation = 'คุณสามารถจัดการอารมณ์ได้ดี มีความพร้อมในระดับที่ดี หากมีเรื่องท้าทายก็สามารถรับมือได้อย่างสบาย';
+                icon = '😊';
+                colorClass = 'text-blue-500';
             } else if (totalScore >= 19) {
-                level = "ปานกลาง";
-                recommendation = "อารมณ์ของคุณอยู่ในเกณฑ์ปกติ อาจมีเหนื่อยล้าหรือเบื่อบ้างเล็กน้อย แนะนำให้หาเวลาพักสายตาหรือทำกิจกรรมที่ผ่อนคลายระหว่างวัน";
-                icon = "😌"; colorClass = "text-yellow-500";
+                level = 'ปานกลาง';
+                recommendation = 'อารมณ์ของคุณอยู่ในเกณฑ์ปกติ อาจมีเหนื่อยล้าหรือเบื่อบ้างเล็กน้อย แนะนำให้หาเวลาพักสายตาหรือทำกิจกรรมที่ผ่อนคลายระหว่างวัน';
+                icon = '😌';
+                colorClass = 'text-yellow-500';
             } else if (totalScore >= 12) {
-                level = "เริ่มมีภาวะตึงเครียด";
-                recommendation = "คุณอาจกำลังรู้สึกเหนื่อยล้าหรือมีเรื่องให้คิดมาก แนะนำให้ลดความคาดหวังลงชั่วคราว หาเวลาพักผ่อนอย่างจริงจัง หรือพูดคุยระบายกับคนใกล้ชิด";
-                icon = "😟"; colorClass = "text-orange-500";
+                level = 'เริ่มมีภาวะตึงเครียด';
+                recommendation = 'คุณอาจกำลังรู้สึกเหนื่อยล้าหรือมีเรื่องให้คิดมาก แนะนำให้ลดความคาดหวังลงชั่วคราว หาเวลาพักผ่อนอย่างจริงจัง หรือพูดคุยระบายกับคนใกล้ชิด';
+                icon = '😟';
+                colorClass = 'text-orange-500';
             } else {
-                level = "ภาวะเสี่ยง (ควรได้รับการดูแล)";
-                recommendation = "สภาวะอารมณ์ของคุณค่อนข้างเปราะบางและมีความตึงเครียดสูงมาก ขอแนะนำให้คุณพักผ่อนทันที หากรู้สึกไม่ดีขึ้น ควรพิจารณาปรึกษาผู้เชี่ยวชาญหรือศูนย์ให้คำปรึกษาของสถานศึกษาครับ";
-                icon = "❤️‍🩹"; colorClass = "text-red-600";
+                level = 'ภาวะเสี่ยง (ควรได้รับการดูแล)';
+                recommendation = 'สภาวะอารมณ์ของคุณค่อนข้างเปราะบางและมีความตึงเครียดสูงมาก ขอแนะนำให้คุณพักผ่อนทันที หากรู้สึกไม่ดีขึ้น ควรพิจารณาปรึกษาผู้เชี่ยวชาญหรือศูนย์ให้คำปรึกษาของสถานศึกษาครับ';
+                icon = '❤️‍🩹';
+                colorClass = 'text-red-600';
             }
 
             formData.resultLevel = level;
 
-            // 4. แสดงผล Popup
             document.getElementById('modalIcon').textContent = icon;
-            document.getElementById('modalLevel').textContent = "ระดับ: " + level;
-            document.getElementById('modalLevel').className = "text-2xl font-semibold mb-2 " + colorClass;
+            document.getElementById('modalLevel').textContent = 'ระดับ: ' + level;
+            document.getElementById('modalLevel').className = 'text-2xl font-semibold mb-2 ' + colorClass;
             document.getElementById('modalRecommendation').textContent = recommendation;
             document.getElementById('summaryInfo').textContent = `รหัส: ${formData.studentId} | รอบ: ${formData.testPhase}`;
-            
             document.getElementById('resultModal').classList.remove('hidden');
 
-            // 5. ส่งข้อมูลไปยัง Google Sheets
             sendDataToGoogleSheets(formData);
         });
 
         function sendDataToGoogleSheets(data) {
-            // *** นำลิงก์ที่ได้มาวางในเครื่องหมายคำพูดด้านล่างนี้ ***
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzy3pqqo8D0d_Lzy7myqK0DF_wwn5OdRi0W52delCRutSI3qlvEIj3VIoUOb6jltKsI_Q/exec'; 
-            
-            console.log("ข้อมูลที่เตรียมส่งเข้า Sheet:", data);
-            
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzy3pqqo8D0d_Lzy7myqK0DF_wwn5OdRi0W52delCRutSI3qlvEIj3VIoUOb6jltKsI_Q/exec';
+
+            console.log('ข้อมูลที่เตรียมส่งเข้า Sheet:', data);
+
             fetch(scriptURL, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' }
             })
-            .then(response => console.log('ส่งข้อมูลสำเร็จ'))
+            .then(() => console.log('ส่งข้อมูลสำเร็จ'))
             .catch(error => console.error('เกิดข้อผิดพลาดในการส่งข้อมูล:', error.message));
         }
 
         function closeModal() {
             document.getElementById('resultModal').classList.add('hidden');
             document.getElementById('assessmentForm').reset();
-            prevStep(); // กลับไปหน้าแรก
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
         }
     </script>
 </body>
