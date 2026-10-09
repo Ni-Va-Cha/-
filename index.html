@@ -3,278 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แบบประเมินการเห็นคุณค่าในตนเอง (Rosenberg Self-Esteem Scale)</title>
+    <title>แบบประเมินการมองเห็นคุณค่าในตัวเอง (Rosenberg Self-Esteem Scale)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fff0f5;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #d81b60;
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #ad1457;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        .instruction {
-            background-color: #fce4ec;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #880e4f;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-        .question-card {
-            background: #fafafa;
-            border: 1px solid #eee;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .question-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #4a148c;
-        }
-        .options label {
-            display: block;
-            margin: 6px 0;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-submit {
-            display: block;
-            width: 100%;
-            background-color: #e91e63;
+        body { font-family: 'Prompt', sans-serif; background-color: #fdf2f8; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Radio Button Styles */
+        .radio-custom input:checked + div {
+            background-color: #ec4899;
             color: white;
-            padding: 12px;
-            border: none;
+            border-color: #ec4899;
+        }
+
+        /* ตกแต่ง Scrollbar ให้เลื่อนดูง่ายและสวยงาม */
+        .modal-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 25px;
-            transition: background 0.3s;
         }
-        .btn-submit:hover {
-            background-color: #c2185b;
-        }
-        #result {
-            margin-top: 25px;
-            padding: 20px;
+        .modal-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
             border-radius: 8px;
-            background-color: #e8f5e9;
-            border: 1px solid #c8e6c9;
-            display: none;
-            text-align: center;
         }
-        #result h2 {
-            color: #2e7d32;
-            margin-top: 0;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            color: #777;
+        .modal-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
-<body>
+<body class="text-gray-800 p-4 md:p-8">
 
-<div class="container">
-    <h1>Rosenberg Self-Esteem Scale</h1>
-    <div class="subtitle">(แบบประเมิน เรื่อง การมองเห็นคุณค่าในตนเอง)</div>
-    
-    <div class="instruction">
-        "ตอบแบบสอบถามด้วยความจริงใจกับตัวเองให้มากที่สุด ระดับการให้คะแนนมีความแตกต่างกันในแต่ละข้อ กรุณาตรวจสอบก่อนรวมคะแนน แบบทดสอบอาจมีความคลาดเคลื่อนตาม เพศ วัย ประสบการณ์ส่วนบุคคล"
-    </div>
-
-    <form id="rsesForm">
-        <!-- ข้อ 1 -->
-        <div class="question-card">
-            <div class="question-title">1. โดยรวมฉันรู้สึกพอใจกับตัวเอง</div>
-            <div class="options">
-                <label><input type="radio" name="q1" value="4" required> เห็นด้วยอย่างยิ่ง (4)</label>
-                <label><input type="radio" name="q1" value="3"> เห็นด้วย (3)</label>
-                <label><input type="radio" name="q1" value="2"> ไม่เห็นด้วย (2)</label>
-                <label><input type="radio" name="q1" value="1"> ไม่เห็นด้วยอย่างยิ่ง (1)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 2 -->
-        <div class="question-card">
-            <div class="question-title">2. ฉันรู้สึกว่าตัวเองก็ดีอยู่เหมือนกัน</div>
-            <div class="options">
-                <label><input type="radio" name="q2" value="4" required> เห็นด้วยอย่างยิ่ง (4)</label>
-                <label><input type="radio" name="q2" value="3"> เห็นด้วย (3)</label>
-                <label><input type="radio" name="q2" value="2"> ไม่เห็นด้วย (2)</label>
-                <label><input type="radio" name="q2" value="1"> ไม่เห็นด้วยอย่างยิ่ง (1)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 3 -->
-        <div class="question-card">
-            <div class="question-title">3. ฉันคิดว่าฉันก็ทำอะไรได้ดี เหมือนกับคนอื่น ๆ</div>
-            <div class="options">
-                <label><input type="radio" name="q3" value="4" required> เห็นด้วยอย่างยิ่ง (4)</label>
-                <label><input type="radio" name="q3" value="3"> เห็นด้วย (3)</label>
-                <label><input type="radio" name="q3" value="2"> ไม่เห็นด้วย (2)</label>
-                <label><input type="radio" name="q3" value="1"> ไม่เห็นด้วยอย่างยิ่ง (1)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 4 (ข้อทางลบ: คิดคะแนนกลับด้าน) -->
-        <div class="question-card">
-            <div class="question-title">4. บ่อยครั้งที่ฉันรู้สึกว่าตัวเองไม่มีอะไรดี</div>
-            <div class="options">
-                <label><input type="radio" name="q4" value="4" required> เห็นด้วยอย่างยิ่ง (1)</label>
-                <label><input type="radio" name="q4" value="3"> เห็นด้วย (2)</label>
-                <label><input type="radio" name="q4" value="2"> ไม่เห็นด้วย (3)</label>
-                <label><input type="radio" name="q4" value="1"> ไม่เห็นด้วยอย่างยิ่ง (4)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 5 (ข้อทางลบ) -->
-        <div class="question-card">
-            <div class="question-title">5. ฉันรู้สึกว่าฉันไม่มีอะไรที่น่าภูมิใจกับตัวเองมากนัก</div>
-            <div class="options">
-                <label><input type="radio" name="q5" value="4" required> เห็นด้วยอย่างยิ่ง (1)</label>
-                <label><input type="radio" name="q5" value="3"> เห็นด้วย (2)</label>
-                <label><input type="radio" name="q5" value="2"> ไม่เห็นด้วย (3)</label>
-                <label><input type="radio" name="q5" value="1"> ไม่เห็นด้วยอย่างยิ่ง (4)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 6 (ข้อทางลบ) -->
-        <div class="question-card">
-            <div class="question-title">6. ฉันรู้สึกว่าบ่อย ๆ ตัวเองไร้ค่า</div>
-            <div class="options">
-                <label><input type="radio" name="q6" value="4" required> เห็นด้วยอย่างยิ่ง (1)</label>
-                <label><input type="radio" name="q6" value="3"> เห็นด้วย (2)</label>
-                <label><input type="radio" name="q6" value="2"> ไม่เห็นด้วย (3)</label>
-                <label><input type="radio" name="q6" value="1"> ไม่เห็นด้วยอย่างยิ่ง (4)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 7 -->
-        <div class="question-card">
-            <div class="question-title">7. ฉันว่าฉันมีคุณค่าอย่างน้อย ๆ ที่สุดก็มีคุณค่าเท่ากับคนอื่น ๆ</div>
-            <div class="options">
-                <label><input type="radio" name="q7" value="4" required> เห็นด้วยอย่างยิ่ง (4)</label>
-                <label><input type="radio" name="q7" value="3"> เห็นด้วย (3)</label>
-                <label><input type="radio" name="q7" value="2"> ไม่เห็นด้วย (2)</label>
-                <label><input type="radio" name="q7" value="1"> ไม่เห็นด้วยอย่างยิ่ง (1)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 8 (ข้อทางลบ) -->
-        <div class="question-card">
-            <div class="question-title">8. โดยรวมแล้วฉันค่อนข้างรู้สึกว่าตัวเองล้มเหลว (I am Failure.)</div>
-            <div class="options">
-                <label><input type="radio" name="q8" value="4" required> เห็นด้วยอย่างยิ่ง (1)</label>
-                <label><input type="radio" name="q8" value="3"> เห็นด้วย (2)</label>
-                <label><input type="radio" name="q8" value="2"> ไม่เห็นด้วย (3)</label>
-                <label><input type="radio" name="q8" value="1"> ไม่เห็นด้วยอย่างยิ่ง (4)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 9 (ข้อทางลบ) -->
-        <div class="question-card">
-            <div class="question-title">9. ฉันเชื่อว่าฉันน่าจะมีความนับถือในตัวเองได้มากกว่านี้ (Respect for myself)</div>
-            <div class="options">
-                <label><input type="radio" name="q9" value="4" required> เห็นด้วยอย่างยิ่ง (1)</label>
-                <label><input type="radio" name="q9" value="3"> เห็นด้วย (2)</label>
-                <label><input type="radio" name="q9" value="2"> ไม่เห็นด้วย (3)</label>
-                <label><input type="radio" name="q9" value="1"> ไม่เห็นด้วยอย่างยิ่ง (4)</label>
-            </div>
-        </div>
-
-        <!-- ข้อ 10 -->
-        <div class="question-card">
-            <div class="question-title">10. ฉันมีทัศนคติที่ดีกับตัวเอง</div>
-            <div class="options">
-                <label><input type="radio" name="q10" value="4" required> เห็นด้วยอย่างยิ่ง (4)</label>
-                <label><input type="radio" name="q10" value="3"> เห็นด้วย (3)</label>
-                <label><input type="radio" name="q10" value="2"> ไม่เห็นด้วย (2)</label>
-                <label><input type="radio" name="q10" value="1"> ไม่เห็นด้วยอย่างยิ่ง (1)</label>
-            </div>
-        </div>
-
-        <button type="button" class="btn-submit" onclick="calculateScore()">ส่งคำตอบและประเมินผล</button>
-    </form>
-
-    <div id="result">
-        <h2>ผลการประเมินของคุณ</h2>
-        <p id="scoreText" style="font-size: 18px; font-weight: bold;"></p>
-        <p id="interpretationText"></p>
-    </div>
-
-    <div class="footer">
-        อ้างอิงจาก Rosenberg, M. (1965). Society and the adolescent self-image.
-    </div>
-</div>
-
-<script>
-    function calculateScore() {
-        const form = document.getElementById('rsesForm');
-        let totalScore = 0;
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden fade-in border border-pink-100">
         
-        // ตรวจสอบว่าตอบครบทุกข้อหรือยัง
-        for (let i = 1; i <= 10; i++) {
-            const radios = form.elements['q' + i];
-            let answered = false;
-            for (const radio of radios) {
-                if (radio.checked) {
-                    totalScore += parseInt(radio.value);
-                    answered = true;
-                    break;
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-pink-500 to-rose-400 text-white p-8 text-center">
+            <h1 class="text-2xl md:text-3xl font-semibold mb-2">แบบประเมิน เรื่อง การมองเห็นคุณค่าในตัวเอง</h1>
+            <h2 class="text-lg md:text-xl font-medium opacity-90 mb-4">(Rosenberg Self-Esteem Scale)</h2>
+            <p class="text-sm opacity-80 max-w-2xl mx-auto">
+                ตอบแบบสอบถามด้วยความจริงใจกับตัวเองให้มากที่สุด ระดับการให้คะแนนมีความแตกต่างกันในแต่ละข้อ กรุณาตรวจสอบก่อนรวมคะแนน
+            </p>
+        </div>
+
+        <form id="assessmentForm" class="p-6 md:p-10">
+            
+            <!-- Step 1: ข้อมูลส่วนตัว -->
+            <div id="step1">
+                <div class="flex items-center mb-6 border-b border-pink-100 pb-3">
+                    <span class="bg-pink-100 text-pink-600 font-bold w-8 h-8 rounded-full flex items-center justify-center mr-3">1</span>
+                    <h2 class="text-xl font-medium text-pink-700">ข้อมูลทั่วไป</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-gray-700">รหัสนักศึกษา (ถ้ามี)</label>
+                        <input type="text" id="studentId" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-pink-400 outline-none transition" placeholder="เช่น B6XXXXX">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-gray-700">ระยะการประเมิน *</label>
+                        <select id="testPhase" required class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-pink-400 outline-none transition bg-white">
+                            <option value="">-- กรุณาเลือก --</option>
+                            <option value="Pre-test">ก่อนเข้าร่วมกิจกรรม (Pre-test)</option>
+                            <option value="Post-test">หลังเข้าร่วมกิจกรรม (Post-test)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-gray-700">เพศ *</label>
+                        <select id="gender" required class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-pink-400 outline-none transition bg-white">
+                            <option value="">-- กรุณาเลือก --</option>
+                            <option value="ชาย">ชาย</option>
+                            <option value="หญิง">หญิง</option>
+                            <option value="อื่นๆ">อื่นๆ / ไม่ระบุ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-gray-700">ชั้นปี *</label>
+                        <select id="year" required class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-pink-400 outline-none transition bg-white">
+                            <option value="">-- กรุณาเลือก --</option>
+                            <option value="ปี 1">ปี 1</option>
+                            <option value="ปี 2">ปี 2</option>
+                            <option value="ปี 3">ปี 3</option>
+                            <option value="ปี 4">ปี 4</option>
+                            <option value="อื่นๆ">อื่นๆ</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium mb-1 text-gray-700">สถานที่ / คณะ / สาขาที่สังกัด *</label>
+                        <input type="text" id="location" required class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-pink-400 outline-none transition" placeholder="โปรดระบุข้อมูล">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button type="button" onclick="nextStep()" class="bg-pink-500 hover:bg-pink-600 text-white font-medium py-3 px-8 rounded-xl shadow-md transition transform hover:-translate-y-1">
+                        เริ่มทำแบบประเมิน ➔
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: แบบประเมิน -->
+            <div id="step2" class="hidden fade-in">
+                <div class="flex items-center mb-6 border-b border-pink-100 pb-3">
+                    <span class="bg-pink-100 text-pink-600 font-bold w-8 h-8 rounded-full flex items-center justify-center mr-3">2</span>
+                    <h2 class="text-xl font-medium text-pink-700">แบบประเมิน 10 ข้อ</h2>
+                </div>
+                
+                <div id="questionsContainer" class="space-y-6">
+                    <!-- คำถามจะถูกสร้างด้วย JavaScript -->
+                </div>
+
+                <div class="flex flex-col-reverse md:flex-row justify-between mt-10 gap-4">
+                    <button type="button" onclick="prevStep()" class="w-full md:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-8 rounded-xl transition">
+                        ⬅ ย้อนกลับ
+                    </button>
+                    <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium py-3 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-1">
+                        ส่งผลการประเมิน
+                    </button>
+                </div>
+            </div>
+
+        </form>
+		<!-- แหล่งอ้างอิงท้ายฟอร์ม -->
+        <div class="text-center pb-6 text-xs text-pink-400">
+            <p>อ้างอิง: Rosenberg, M. (1965). Society and the adolescent self-image. (Rosenberg Self-Esteem Scale)</p>
+        </div>
+    </div>
+
+    <!-- Modal แสดงผลลัพธ์ (แก้ไขระบบเลื่อนหน้าจอและสคอลล์บาร์ใหม่ทั้งหมด) -->
+    <div id="resultModal" class="fixed inset-0 bg-gray-900 bg-opacity-70 hidden flex items-center justify-center z-50 fade-in backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full text-center shadow-2xl relative my-auto">
+            
+            <div id="modalIcon" class="text-6xl mb-3">🌟</div>
+            <h3 class="text-2xl font-bold mb-4" id="modalLevel">ระดับคะแนน</h3>
+            
+            <!-- กล่องข้อความที่สามารถเลื่อนขึ้นลง (Scroll) ดูรายละเอียดทั้งหมดได้ -->
+            <div class="modal-scroll max-h-[50vh] overflow-y-auto bg-pink-50/50 p-4 rounded-2xl border border-pink-100 mb-6 text-left shadow-inner">
+                <div class="text-gray-700 leading-relaxed text-sm md:text-base space-y-2" id="modalRecommendation">
+                    คำแนะนำจะแสดงที่นี่...
+                </div>
+            </div>
+            
+            <div class="p-3 bg-gray-50 rounded-xl text-sm text-left mb-6 text-gray-600 border border-gray-100">
+                <p class="font-medium flex items-center text-pink-600">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    บันทึกข้อมูลเข้าสู่ระบบเรียบร้อยแล้ว
+                </p>
+                <p id="summaryInfo" class="mt-1 text-gray-500 pl-6 text-xs">รหัส: - | รอบ: -</p>
+            </div>
+
+            <button onclick="closeModal()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-medium py-3.5 rounded-xl transition shadow-md cursor-pointer">
+                เสร็จสิ้นและกลับสู่หน้าหลัก
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 'q1', num: 1, text: 'โดยรวมฉันรู้สึกพอใจกับตัวเอง', type: 'positive' },
+            { id: 'q2', num: 2, text: 'ฉันรู้สึกว่าตัวเองก็มีดีอยู่เหมือนกัน', type: 'positive' },
+            { id: 'q3', num: 3, text: 'ฉันคิดว่าฉันก็ทำอะไรได้ดี เหมือนกับคนอื่น ๆ', type: 'positive' },
+            { id: 'q4', num: 4, text: 'บ่อยครั้งที่ฉันรู้สึกว่าตัวเองไม่มีอะไรดี', type: 'negative' },
+            { id: 'q5', num: 5, text: 'ฉันรู้สึกว่าฉันไม่มีอะไรที่น่าภูมิใจกับตัวเองมากนัก', type: 'negative' },
+            { id: 'q6', num: 6, text: 'ฉันรู้สึกว่าบ่อย ๆ ตัวเองไร้ค่า', type: 'negative' },
+            { id: 'q7', num: 7, text: 'ฉันรู้สึกว่าฉันมีคุณค่าอย่างน้อย ๆ ที่สุดก็มีคุณค่าเท่ากับคนอื่น ๆ', type: 'positive' },
+            { id: 'q8', num: 8, text: 'โดยรวมแล้วฉันค่อนข้างรู้สึกว่าตัวเองล้มเหลว (I am Failure.)', type: 'negative' },
+            { id: 'q9', num: 9, text: 'ฉันเชื่อว่าฉันน่าจะมีความนับถือในตัวเองได้มากกว่านี้ (Respect for myself)', type: 'negative' },
+            { id: 'q10', num: 10, text: 'ฉันมีทัศนคติที่ดีกับตัวเอง', type: 'positive' }
+        ];
+
+        const options = [
+            { label: 'เห็นด้วยอย่างยิ่ง', value: 4 },
+            { label: 'เห็นด้วย', value: 3 },
+            { label: 'ไม่เห็นด้วย', value: 2 },
+            { label: 'ไม่เห็นด้วยอย่างยิ่ง', value: 1 }
+        ];
+
+        const container = document.getElementById('questionsContainer');
+        questions.forEach((q) => {
+            let optionsHtml = options.map(opt => `
+                <label class="radio-custom flex-1 cursor-pointer">
+                    <input type="radio" name="${q.id}" value="${opt.value}" required class="peer sr-only">
+                    <div class="h-full border border-gray-200 bg-white text-gray-600 rounded-xl p-3 text-center text-sm font-medium transition duration-200 hover:bg-pink-50 hover:border-pink-200 flex items-center justify-center">
+                        ${opt.label}
+                    </div>
+                </label>
+            `).join('');
+
+            let html = `
+                <div class="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition duration-300">
+                    <p class="mb-4 font-medium text-gray-800 text-lg">
+                        <span class="text-pink-500 font-bold mr-1">${q.num}.</span> ${q.text} 
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-2">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+            container.innerHTML += html;
+        });
+
+        function nextStep() {
+            const requiredFields = ['testPhase', 'gender', 'year', 'location'];
+            let isValid = true;
+            requiredFields.forEach(id => {
+                if(!document.getElementById(id).value) {
+                    isValid = false;
+                    document.getElementById(id).classList.add('border-red-400', 'ring-1', 'ring-red-400');
+                } else {
+                    document.getElementById(id).classList.remove('border-red-400', 'ring-1', 'ring-red-400');
                 }
-            }
-            if (!answered) {
-                alert('กรุณาตอบคำถามให้ครบทุกข้อครับ');
+            });
+            
+            if(!isValid) {
+                alert('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วนก่อนเริ่มทำแบบประเมินครับ');
                 return;
             }
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // แสดงผลลัพธ์
-        const resultDiv = document.getElementById('result');
-        const scoreText = document.getElementById('scoreText');
-        const interpretationText = document.getElementById('interpretationText');
-
-        scoreText.innerText = `คะแนนรวมของคุณ: ${totalScore} คะแนน (จากเต็ม 40 คะแนน)`;
-        
-        let interpretation = "";
-        if (totalScore >= 30) {
-            interpretation = "ระดับการเห็นคุณค่าในตนเองอยู่ในเกณฑ์ 'สูง' (High Self-Esteem)";
-        } else if (totalScore >= 15) {
-            interpretation = "ระดับการเห็นคุณค่าในตนเองอยู่ในเกณฑ์ 'ปานกลาง' (Normal/Moderate Self-Esteem)";
-        } else {
-            interpretation = "ระดับการเห็นคุณค่าในตนเองอยู่ในเกณฑ์ 'ต่ำ' (Low Self-Esteem)";
+        function prevStep() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        interpretationText.innerText = interpretation;
-        resultDiv.style.display = 'block';
-        resultDiv.scrollIntoView({ behavior: 'smooth' });
-    }
-</script>
+        document.getElementById('assessmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                studentId: document.getElementById('studentId').value || 'ไม่ระบุ',
+                testPhase: document.getElementById('testPhase').value,
+                gender: document.getElementById('gender').value,
+                year: document.getElementById('year').value,
+                location: document.getElementById('location').value,
+                timestamp: new Date().toLocaleString('th-TH')
+            };
 
+            let totalScore = 0;
+            
+            questions.forEach(q => {
+                let selectedValue = parseInt(document.querySelector(`input[name="${q.id}"]:checked`).value);
+                let finalItemScore = selectedValue;
+
+                if (q.type === 'negative') {
+                    finalItemScore = 5 - selectedValue;
+                }
+
+                formData[q.id + '_raw'] = selectedValue; 
+                formData[q.id] = finalItemScore;         
+                totalScore += finalItemScore;
+            });
+
+            formData.totalScore = totalScore;
+
+            // 3. วิเคราะห์ระดับและคำแนะนำ (ปรับภาษาให้ละมุนและถนอมน้ำใจมากขึ้น)
+            let level, recommendation, icon, colorClass;
+            
+            if (totalScore >= 35) {
+                level = "เปี่ยมด้วยความภาคภูมิใจในตนเอง (ยอดเยี่ยม)";
+                recommendation = "คุณมีพลังบวกและมองเห็นความงดงามในตัวเองได้อย่างชัดเจน มีความมั่นใจและพร้อมส่งต่อพลังดีๆ ให้กับคนรอบข้าง ขอให้ความรักตัวเองนี้โอบกอดคุณไว้เสมอนะครับ";
+                icon = "🌟"; colorClass = "text-green-600";
+            } else if (totalScore >= 29) {
+                level = "มองเห็นคุณค่าในตนเองเป็นอย่างดี (ดีมาก)";
+                recommendation = "คุณเชื่อมั่นในศักยภาพของตนเองเป็นอย่างดี สามารถรับมือกับเรื่องราวต่างๆ ด้วยทัศนคติที่สร้างสรรค์และเป็นมิตรกับหัวใจตัวเอง";
+                icon = "😊"; colorClass = "text-blue-500";
+            } else if (totalScore >= 23) {
+                level = "มีความสมดุลในจิตใจ (ปานกลาง)";
+                recommendation = "คุณมีความมั่นคงในจิตใจ แต่อาจมีบางจังหวะที่เผลอสงสัยในความเก่งของตัวเองบ้าง ลองให้เวลากับการชื่นชมความพยายามเล็กๆ น้อยๆ ของตัวเองในทุกๆ วันดูนะครับ";
+                icon = "😌"; colorClass = "text-yellow-500";
+            } else if (totalScore >= 17) {
+                level = "จังหวะที่ต้องการการโอบกอดตัวเอง";
+                recommendation = "ช่วงนี้คุณอาจจะเผลอกดดันตัวเองไปสักนิด หรือเหนื่อยล้ากับความคาดหวัง อยากให้ลองอนุญาตให้ตัวเองได้พัก และโอบกอดทุกความรู้สึกด้วยความอ่อนโยน คุณทำได้ดีมากๆ แล้วที่ก้าวผ่านแต่ละวันมาได้";
+                icon = "🌻"; colorClass = "text-orange-400";
+            } else {
+                level = "ช่วงเวลาที่หัวใจต้องการการดูแลและพักพิง";
+                recommendation = "ตอนนี้หัวใจคุณอาจกำลังต้องการพื้นที่ปลอดภัยเป็นพิเศษ อยากให้จำไว้ว่า 'คุณมีคุณค่าเสมอ' ไม่ว่าจะอยู่ในสถานการณ์ใด หากรู้สึกแบกรับไม่ไหว การอนุญาตให้ตัวเองได้พักหรือพูดคุยกับใครสักคน จะเป็นของขวัญที่ดีที่สุดที่คุณมอบให้ตัวเองในตอนนี้นะครับ";
+                icon = "🫂"; colorClass = "text-rose-500";
+            }
+
+            let extraRecommendation = "";
+            
+            if (formData['q4_raw'] >= 3) {
+                extraRecommendation += "<br><br><b>🌻 มุมมองเรื่อง 'การรู้สึกว่าตัวเองไม่มีอะไรดี':</b><br>บางครั้งเรามักเผลอเพ่งเล็งจุดที่คิดว่าบกพร่อง จนลืมมองเห็นความงดงามและเรื่องราวดีๆ ที่ซ่อนอยู่ในตัวคุณ ค่อยๆ ใจดีกับตัวเองให้มากขึ้นนะ";
+            }
+            if (formData['q5_raw'] >= 3) {
+                extraRecommendation += "<br><br><b>🌻 มุมมองเรื่อง 'ความภูมิใจในตัวเอง':</b><br>ความภูมิใจไม่ต้องรอให้ถึงวันที่ยิ่งใหญ่ แค่คุณลุกขึ้นมาสู้ชีวิตและผ่านแต่ละวันมาได้ นั่นก็คือความสำเร็จที่น่าชื่นชมมากๆ แล้วครับ";
+            }
+            if (formData['q6_raw'] >= 3) {
+                extraRecommendation += "<br><br><b>🌻 ในวันที่เผลอรู้สึก 'ไร้ค่า':</b><br>อยากให้รู้ไว้ว่าการมีอยู่ของคุณมีความหมายกับโลกใบนี้และใครหลายคนเสมอ คุณมีคุณค่าในแบบที่เป็นโดยไม่ต้องเอาไปเทียบกับใครเลย";
+            }
+            if (formData['q8_raw'] >= 3) {
+                extraRecommendation += "<br><br><b>🌻 เมื่อรู้สึกว่าตัวเอง 'ล้มเหลว':</b><br>ผลลัพธ์ที่ไม่เป็นดั่งใจในบางเรื่อง เป็นเพียงบทเรียนผ่านเข้ามา ไม่ได้แปลว่าตัวตนของคุณล้มเหลว อนุญาตให้ตัวเองผิดพลาดเพื่อเติบโตต่อนะครับ";
+            }
+            if (formData['q9_raw'] >= 3) {
+                extraRecommendation += "<br><br><b>🌻 เรื่อง 'การนับถือและเคารพตัวเอง':</b><br>การสร้างความรักและความนับถือในตัวเองเป็นเรื่องต้องใช้เวลา ลองเริ่มต้นจากการให้อภัยตัวเองในวันที่รู้สึกเหนื่อยล้าดูนะครับ";
+            }
+
+            if (extraRecommendation !== "") {
+                recommendation += extraRecommendation;
+            }
+
+            formData.resultLevel = level;
+
+            document.getElementById('modalIcon').textContent = icon;
+            document.getElementById('modalLevel').textContent = level;
+            document.getElementById('modalLevel').className = "text-xl md:text-2xl font-bold mb-3 " + colorClass;
+            document.getElementById('modalRecommendation').innerHTML = recommendation; 
+            document.getElementById('summaryInfo').textContent = `รหัส: ${formData.studentId} | รอบ: ${formData.testPhase}`;
+            
+            document.getElementById('resultModal').classList.remove('hidden');
+
+            sendDataToGoogleSheets(formData);
+        });
+
+        function sendDataToGoogleSheets(data) {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzmoTCsoBTQQ9CUyVsy7_G_KjW4hxk4N5CcmwqNJ2EgTW4_BmSTldYAlZ5zTxJQZxiA/exec'; 
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            })
+            .then(response => console.log('ส่งข้อมูลเข้า Sheet สำเร็จ'))
+            .catch(error => console.error('เกิดข้อผิดพลาด:', error));
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').classList.add('hidden');
+            document.getElementById('assessmentForm').reset();
+            prevStep(); 
+        }
+    </script>
 </body>
 </html>
